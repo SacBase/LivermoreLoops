@@ -1,0 +1,11 @@
+name: Test Livermore Loops
+
+on:
+  workflow_dispatch: # run from webUI
+  schedule:
+    # run once a week at 4:05 Wed.
+    - cron: '5 4 * * 3'
+
+jobs:
+  Does_It_Build:
+    uses: sacbase/.github/.github/workflows/just_build.yml@f1e6400eeb1aaa5a67e109e1a893fae1772023fc
