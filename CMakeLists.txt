@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.3)
 
 PROJECT (sac-LivermoreLoops)
 
+
 # Where the compiled sac modules result
 SET (DLL_BUILD_DIR  "${PROJECT_BINARY_DIR}/lib")
 
@@ -16,6 +17,8 @@ INCLUDE ("cmake-common/misc-macros.cmake")
 
 SET (SAC2C_FLAGS -v0 -O3 -maxlur 3 -linksetsize ${LINKSETSIZE} -L ${DLL_BUILD_DIR} -T ${DLL_BUILD_DIR})
 
+ENABLE_TESTING() # This must precede any test creation
+
 # Get Filename, sans path, for each test
 FILE(GLOB BM_DIRST ${CMAKE_SOURCE_DIR}/loop*)
 
@@ -28,10 +31,10 @@ FOREACH (TARGET IN ITEMS ${TARGETS})
   ENDFOREACH ()
 ENDFOREACH ()
 
-# Testing section, arguments read from stdin
-# Testing section, support for multiple versions
-MESSAGE( STATUS  "START TESTING WITH " ${CMAKE_PROJECT_NAME} " and " ${PROJECT_NAME})
-MESSAGE (STATUS "Build versions are now: " ${buildversions})
+iF(0)
+# Testing section
+MESSAGE( STATUS  "TESTING WITH " ${CMAKE_PROJECT_NAME} " and " ${PROJECT_NAME})
+##MESSAGE (STATUS "Build versions are now: " ${buildversions})
 
 IF(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     INCLUDE(CTest)
@@ -59,30 +62,29 @@ IF(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
        ##-mt ${THREDS} < ${BM_DIR}/${BM_NAME}.inp)
 
 # Add tests for the Cartesian product of BENCHMARKS, TARGETS, THREADS, and BUILDVARIANTS
-# E.g., BENCHMARKS are: loop01, loop02, loop03...loop08
+# E.g., BENCHMARKS (BM) are: loop01, loop02, loop03...loop08
 #       TARGETS are: seq, mt_pth
-#       THREADS are: 1 2 4 8
+#       THREADS are: 1 2 4 8, as you like
 #       BUILDVARIANTS are (for some benchmarks): apl1, apl2, tc1, tc2
-#
 
   MESSAGE (STATUS "BM_DIRST is " ${BM_DIRST})
   FOREACH ( BM_DIR IN ITEMS ${BM_DIRST})
-          GET_FILENAME_COMPONENT( BM_NAME ${BM_DIR} NAME)
-          # MESSAGE (STATUS "Adding Test for BM_NAME is " ${BM_NAME})
+    GET_FILENAME_COMPONENT( BM_NAME ${BM_DIR} NAME)
+    MESSAGE (STATUS "Adding Test for BM_NAME is " ${BM_NAME})
     FOREACH (TARGET IN ITEMS ${TARGETS})
-          FOREACH (THREDS IN ITEMS 1 ) # number of threads
-#FIXME add more  THREDS LIST
-              MESSAGE (STATUS Test-${BM_DIR}-${TARGET} " with ARG= " ${ARG} " and THREDS= " ${THREDS})
-              GENERATE_VARIANT_NAMES( ${BM_NAME})
-              message( STATUS " BUILDVARIANTS are" ${BUILDVARIANTS})
-              FOREACH (VARS in ${BUILDVARIANTS})
-                message( STATUS adding test for ${BM_NAME})
-                ADD_TEST (Test-${PROJECT_BINARY_DIR}/${BM_NAME}-${TARGET}
-echo ${CMAKE_SOURCE_DIR}${BM_DIR}/${BM_NAME}/${BM_NAME}.inp |
-${PROJECT_BINARY_DIR}/${BM_NAME}-${TARGET}/${BM_NAME}-${TARGET} -mt ${THREDS} )
-              ENDFOREACH ()
-          ENDFOREACH ()
+      FOREACH (THREDS IN ITEMS 1 2 4 8)
+        MESSAGE (STATUS Test-${BM_DIR}-${TARGET} " with ARG= " ${ARG} " and THREDS= " ${THREDS})
+
+        GENERATE_VARIANT_NAMELISTS( ${BM_NAME})
+        FOREACH (VNL in ${VNLS})
+          SET( VT ${BM_NAME}${TARGET}${VNL}) # Variant target names
+          MESSAGE( STATUS "adding test for " ${VT})
+          ADD_TEST (Test-${PROJECT_BINARY_DIR}/${VT} echo ${CMAKE_SOURCE_DIR}${BM_DIR}/${BM_NAME}/${BM_NAME}.inp | ${PROJECT_BINARY_DIR}/${VT}/${VT} -mt ${THREDS} )
+##${BM_NAME}-${TARGET}/${BM_NAME}-${TARGET} -mt ${THREDS} )
+        ENDFOREACH ()
+      ENDFOREACH ()
     ENDFOREACH ()
   ENDFOREACH ()
 ENDIF()
+endif()
 
