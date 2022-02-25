@@ -47,6 +47,7 @@ inline double[.] genArray(int size)
 
 int main ()
 {
+  int zig; // Crude zero-if-good result
   double[ SIZE] x;
 
   timer = createRTimer();
@@ -70,12 +71,22 @@ int main ()
   stopRTimer( timer);
 
   printf( "Element [1] of the result is : %f\n", x[1]);
+  zig = toi( !APEXFUZZEQ( -0.250000, x[1], 1e6));
 
   numFlops = tod(rep)*tod(SIZE-1)*2.0;
 
   printf( "Wall Clock Time spent           : %7.3f secs\n", getRTimerDbl( timer));
   printf( "Computer Performance achieved   : %7.3f GFlops/s\n", (tod(numFlops)/1000000000.0) / getRTimerDbl( timer));
   
-  return( 0);
+  return( zig);
+}
+
+inline bool APEXFUZZEQ( double x, double y, double CT)
+{ // ISO APL Tolerant equality predicate
+ absx = abs(x);
+ absy = abs(y);
+ tolerance = CT * max(absx,absy);
+ z = abs(x-y) <= tolerance;
+ return(z);
 }
 

@@ -11,7 +11,7 @@ SET (SAC_PROG_SRC
     loop03.sac
 )
 
-# For every sac file, compile Tree and Mod files.
+# For every sac file, compile Tree and Mod files, generate ctest entries
 FOREACH (name ${SAC_PROG_SRC})
     GENERATE_VARIANT_NAMELISTS( ${name})
     COMPILE_SAC2C_WITH_VARIANTS (${name} "" "${SAC2C_FLAGS}")

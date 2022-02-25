@@ -78,11 +78,13 @@ inline double[.] genArray(int size)
 
 int main ()
 {
+  int zig; // Crude zero-if-good result
+  double noLir;
   double[ SIZE] y;
 
   timer = createRTimer();
 
-  rep = (int) FibreScanIntArray();             /* 500000 */
+  rep = (int) FibreScanIntArray();             /* 1000000 */
 
   n = SIZE - 11;
   q = 1.6;
@@ -106,12 +108,21 @@ int main ()
   stopRTimer( timer);
 
   printf( "The sum of the first element is : %f\n", noLir);
-
+  zig = toi( !APEXFUZZEQ( 174599999.996735d, noLir, 1e6));
   numFlops = tod(rep)*tod(n)*5.0;
 
   printf( "Wall Clock Time spent           : %6.3f secs\n", getRTimerDbl( timer));
   printf( "Computer Performance achieved   : %6.2f GFlops\n", (tod(numFlops)/1000000000.0) / getRTimerDbl( timer));
   
-  return( 0);
+  return( zig);
+}
+
+inline bool APEXFUZZEQ( double x, double y, double CT)
+{ // ISO APL Tolerant equality predicate
+ absx = abs(x);
+ absy = abs(y);
+ tolerance = CT * max(absx,absy);
+ z = abs(x-y) <= tolerance;
+ return(z);
 }
 
