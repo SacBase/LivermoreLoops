@@ -9,6 +9,8 @@
 use StdIO: all;
 use Array: all;
 use RTimer: all;
+use CommandLine: all;
+use String: {sscanf};
 
 
 #ifndef VARIANT
@@ -259,10 +261,12 @@ int main ()
   double[ SIZE0, SIZE1, SIZE2] u1;
   double[ SIZE0, SIZE1, SIZE2] u2;
   double[ SIZE0, SIZE1, SIZE2] u3;
+  double shouldbe;
 
   timer = createRTimer();
 
-  rep = (int) FibreScanIntArray();
+  rep = getArg(3);  // loop01 -mt 4 1000000
+                    // 0      1   2 3
   n = SIZE1-1;
   consts = [1.2, 5.6, 8.1, 9.8, 1.5, 4.0, 0.5, 7.9, 6.4, 3.9];
 
@@ -280,8 +284,9 @@ int main ()
   }
   stopRTimer( timer);
 
-  printf( "Element [1] of the result is : %.18g; should be %.18g\n", u1[1,1,1], 155.0d );
-  zig = toi( !APEXFUZZEQ( 155.00000d, u1[1,1,1], 1e-10));
+  shouldbe = 155.0d;
+  printf( "Element [1] of the result is: %.18g; should be %.18g\n", u1[1,1,1], shouldbe);
+  zig = toi( !APEXFUZZEQ( shouldbe, u1[1,1,1], 1e-10));
 
   numFlops = tod(rep)*tod(2)*tod(n-1)*tod(36);
 
@@ -298,5 +303,12 @@ inline bool APEXFUZZEQ( double x, double y, double CT)
  tolerance = CT * max(absx,absy);
  z = abs(x-y) <= tolerance;
  return(z);
+}
+
+inline int getArg(int y)
+{ // Get Command-line argument element y as integer scalar
+  int z;
+  junk, z = sscanf(argv(toi(y)), "%d");
+  return( z);
 }
 

@@ -9,6 +9,8 @@
 use StdIO: all;
 use Array: all;
 use RTimer: all;
+use CommandLine: all;
+use String: {sscanf};
 
 
 #ifndef VARIANT
@@ -127,8 +129,9 @@ int main ()
 double WANT;
   timer = createRTimer();
 
-  rep = (int) FibreScanIntArray();
-  n = (int) FibreScanIntArray();
+  rep = getArg(3);  //         loop04 -mt 4 20000000 35
+                  //parameter #0      1   2 3       4
+  n   = getArg(4);  //         loop04 -mt 4 20000000 35 
 
   m = (SIZE-7)/2;
   x = genArray( SIZE);
@@ -167,5 +170,12 @@ inline bool APEXFUZZEQ( double x, double y, double CT)
  tolerance = CT * max(absx,absy);
  z = abs(x-y) <= tolerance;
  return(z);
+}
+
+inline int getArg(int y)
+{ // Get Command-line argument element y as integer scalar
+  int z;
+  junk, z = sscanf(argv(toi(y)), "%d");
+  return( z);
 }
 

@@ -15,6 +15,8 @@
 use StdIO: all;
 use Array: all;
 use RTimer: all;
+use CommandLine: all;
+use String: {sscanf};
 
 
 #ifndef VARIANT
@@ -81,10 +83,12 @@ int main ()
   int zig; // Crude zero-if-good result
   double noLir;
   double[ SIZE] y;
+  double shouldbe;
 
   timer = createRTimer();
 
-  rep = (int) FibreScanIntArray();             /* 1000000 */
+  rep = getArg(3);  // loop01 -mt 4 1000000
+                    // 0      1   2 3
 
   n = SIZE - 11;
   q = 1.6;
@@ -107,8 +111,9 @@ int main ()
   }
   stopRTimer( timer);
 
-  printf( "The sum of the first element is : %f\n", noLir);
-  zig = toi( !APEXFUZZEQ( 174599999.996735d, noLir, 1e-10));
+  shouldbe = 174599999.996735d;
+  printf( "The sum of the first element is: %.18g and should be: %.18g\n", noLir, shouldbe);
+  zig = toi( !APEXFUZZEQ( shouldbe, noLir, 1e-10));
   numFlops = tod(rep)*tod(n)*5.0;
 
   printf( "Wall Clock Time spent           : %6.3f secs\n", getRTimerDbl( timer));
@@ -124,5 +129,12 @@ inline bool APEXFUZZEQ( double x, double y, double CT)
  tolerance = CT * max(absx,absy);
  z = abs(x-y) <= tolerance;
  return(z);
+}
+
+inline int getArg(int y)
+{ // Get Command-line argument element y as integer scalar
+  int z;
+  junk, z = sscanf(argv(toi(y)), "%d");
+  return( z);
 }
 

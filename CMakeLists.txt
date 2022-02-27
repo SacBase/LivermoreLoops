@@ -14,7 +14,7 @@ SET (LINKSETSIZE        "0"         CACHE STRING "Set a value for -linksetsize p
 INCLUDE ("cmake-common/check-sac2c.cmake")
 INCLUDE ("cmake-common/misc-macros.cmake")
 
-SET (SAC2C_FLAGS -check a -v0 -O3 -maxlur 3 -linksetsize ${LINKSETSIZE} -L ${DLL_BUILD_DIR} -T ${DLL_BUILD_DIR})
+SET (SAC2C_FLAGS -v0 -O3 -maxlur 3 -linksetsize ${LINKSETSIZE} -L ${DLL_BUILD_DIR} -T ${DLL_BUILD_DIR})
 
 ENABLE_TESTING() # This must precede any test creation
 
