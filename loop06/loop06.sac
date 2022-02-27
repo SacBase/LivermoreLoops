@@ -111,7 +111,7 @@ int main ()
   stopRTimer( timer);
 
   printf( "Element [1] of the result is : %f\n", w[1]);
-  zig = toi( !APEXFUZZEQ( 7692.807692, w[1], 1e6));
+  zig = toi( !APEXFUZZEQ( 7692.807692, w[1], 1e-10));
 
   numFlops = tod(rep)*tod(n*(n+1));
 

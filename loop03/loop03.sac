@@ -82,7 +82,7 @@ int main ()
   stopRTimer( timer);
 
   printf( "The sum of the sums is : %f\n", noLir);
-  zig = toi( !APEXFUZZEQ( 335335500500000.000000, noLir, 1e6));
+  zig = toi( !APEXFUZZEQ( 335335500500000.000000, noLir, 1e-10));
 
   numFlops = tod(rep)*tod(n)*2.0;
 

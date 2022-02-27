@@ -85,7 +85,7 @@ int main()
   stopRTimer( timer);
 
   printf( "The first element is : %f\n", x[0]);
-  zig = toi( !APEXFUZZEQ( 1.000000, x[0], 1e6));
+  zig = toi( !APEXFUZZEQ( 1.000000, x[0], 1e-10));
 
   numFlops = 0.0;
   ii=n;

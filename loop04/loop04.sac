@@ -124,7 +124,7 @@ int main ()
 {
   int zig; // Crude zero-if-good result
   double[ SIZE] x;
-
+double WANT;
   timer = createRTimer();
 
   rep = (int) FibreScanIntArray();
@@ -146,8 +146,11 @@ int main ()
   }
   stopRTimer( timer);
 
-  printf( "Element [5] of the result is : %f\n", x[5]);
-  zig = toi( !APEXFUZZEQ( -0.073588, x[5], 1e6));
+  WANT = -0.0735877326137d;
+  printf( "Element [5] of the result is: %.18g, WANT is: %.18g\n", x[5], WANT);
+  printf("x[5] - WANT is %.18g\n", x[5] - WANT);
+  printf("WANT - x[5] is %.18g\n", WANT - x[5]);
+  zig = toi( !APEXFUZZEQ( WANT, x[5], 1e-10));
 
   numFlops = tod(rep)*tod((SIZE-6)/m)*tod((n-4)/5)*2.0;
 

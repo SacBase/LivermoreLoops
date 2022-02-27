@@ -108,7 +108,7 @@ int main ()
   stopRTimer( timer);
 
   printf( "The sum of the first element is : %f\n", noLir);
-  zig = toi( !APEXFUZZEQ( 174599999.996735d, noLir, 1e6));
+  zig = toi( !APEXFUZZEQ( 174599999.996735d, noLir, 1e-10));
   numFlops = tod(rep)*tod(n)*5.0;
 
   printf( "Wall Clock Time spent           : %6.3f secs\n", getRTimerDbl( timer));

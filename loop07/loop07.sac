@@ -83,6 +83,9 @@ int main ()
   int zig; // Crude zero-if-good result
   double[ SIZE] w;
   double[ SIZE2, SIZE2] b;
+  double WANT;
+
+  WANT = 91595.712255864637d;
 
   timer = createRTimer();
 
@@ -106,8 +109,8 @@ int main ()
   }
   stopRTimer( timer);
 
-  printf( "Element [1] of the result is : %f\n", y[1]);
-  zig = toi( !APEXFUZZEQ( 91585.712256, y[1], 1e6));
+  printf( "Element [1] of the result is : %.18g, WANT is: %.18g\n", y[1], WANT);
+  zig = toi( !APEXFUZZEQ( WANT, y[1], 1e-10));
 
   numFlops = tod(rep)*tod(n)*tod(16);
 

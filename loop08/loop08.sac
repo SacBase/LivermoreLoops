@@ -280,8 +280,8 @@ int main ()
   }
   stopRTimer( timer);
 
-  printf( "Element [1] of the result is : %f\n", u1[1,1,1]);
-  zig = toi( !APEXFUZZEQ( 155.00000, u1[1,1,1], 1e6));
+  printf( "Element [1] of the result is : %.18g; should be %.18g\n", u1[1,1,1], 155.0d );
+  zig = toi( !APEXFUZZEQ( 155.00000d, u1[1,1,1], 1e-10));
 
   numFlops = tod(rep)*tod(2)*tod(n-1)*tod(36);
 
