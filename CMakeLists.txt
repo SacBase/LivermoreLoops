@@ -14,18 +14,19 @@ SET (LINKSETSIZE        "0"         CACHE STRING "Set a value for -linksetsize p
 INCLUDE ("cmake-common/check-sac2c.cmake")
 INCLUDE ("cmake-common/misc-macros.cmake")
 
-# The old Makefile had SAC2CFLAGS set to "-O3 -v1 -maxlur 3"
-# We port -O3 and -maxlur 3, but we use -v0
-SET (SAC2C_DEF_FLAGS -v0 -O3 -maxlur 3 -linksetsize ${LINKSETSIZE} -L ${DLL_BUILD_DIR} -T ${DLL_BUILD_DIR})
+SET (SAC2C_FLAGS -v0 -O3 -maxlur 3 -linksetsize ${LINKSETSIZE} -L ${DLL_BUILD_DIR} -T ${DLL_BUILD_DIR})
+
+ENABLE_TESTING() # This must precede any test creation
+
+# Get Filename, sans path, for each test
+FILE(GLOB BM_DIRST ${CMAKE_SOURCE_DIR}/loop*)
 
 # For every target run CMakeLists.txt in src
 FOREACH (TARGET IN ITEMS ${TARGETS})
-    ADD_SUBDIRECTORY (loop01   loop01-${TARGET})
-    ADD_SUBDIRECTORY (loop02   loop02-${TARGET})
-    ADD_SUBDIRECTORY (loop03   loop03-${TARGET})
-    ADD_SUBDIRECTORY (loop04   loop04-${TARGET})
-    ADD_SUBDIRECTORY (loop05   loop05-${TARGET})
-    ADD_SUBDIRECTORY (loop06   loop06-${TARGET})
-    ADD_SUBDIRECTORY (loop07   loop07-${TARGET})
-    ADD_SUBDIRECTORY (loop08   loop08-${TARGET})
+  FOREACH( BM_DIR IN ITEMS ${BM_DIRST})
+    MESSAGE (STATUS "Adding SUBDIRECTORY " ${BM_DIR} " for " ${TARGET})
+    GET_FILENAME_COMPONENT( BM_NAME ${BM_DIR} NAME)
+    ADD_SUBDIRECTORY (${BM_NAME} ${BM_NAME}-${TARGET})
+  ENDFOREACH ()
 ENDFOREACH ()
+

@@ -9,6 +9,8 @@
 use StdIO: all;
 use Array: all;
 use RTimer: all;
+use CommandLine: all;
+use String: {sscanf};
 
 
 #ifndef VARIANT
@@ -59,11 +61,13 @@ inline double[.] genArray(int size)
 
 int main ()
 {
+  int zig; // Crude zero-if-good result
   double[ SIZE] z;
 
   timer = createRTimer();
 
-  rep = (int) FibreScanIntArray();             /* 500000 */
+  rep = getArg(3);  // loop03 -mt 4 1000000
+                    // 0      1   2 3
 
   n = SIZE;
   z = genArray( SIZE);
@@ -81,12 +85,29 @@ int main ()
   stopRTimer( timer);
 
   printf( "The sum of the sums is : %f\n", noLir);
+  zig = toi( !APEXFUZZEQ( 335335500500000.000000, noLir, 1e-10));
 
   numFlops = tod(rep)*tod(n)*2.0;
 
   printf( "Wall Clock Time spent           : %6.3f secs\n", getRTimerDbl( timer));
   printf( "Computer Performance achieved   : %6.2f GFlops\n", (tod(numFlops)/1000000000.0) / getRTimerDbl( timer));
   
-  return( 0);
+  return( zig);
+}
+
+inline bool APEXFUZZEQ( double x, double y, double CT)
+{ // ISO APL Tolerant equality predicate
+ absx = abs(x);
+ absy = abs(y);
+ tolerance = CT * max(absx,absy);
+ z = abs(x-y) <= tolerance;
+ return(z);
+}
+
+inline int getArg(int y)
+{ // Get Command-line argument element y as integer scalar
+  int z;
+  junk, z = sscanf(argv(toi(y)), "%d");
+  return( z);
 }
 
